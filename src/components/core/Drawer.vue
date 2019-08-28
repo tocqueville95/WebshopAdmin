@@ -76,6 +76,11 @@ export default {
         text: 'Producten',
       },
       {
+        to: '/machines',
+        icon: 'mdi-coffee',
+        text: 'Machines',
+      },
+      {
         to: '/orders',
         icon: 'mdi-clipboard-outline',
         text: 'Bestellingen',

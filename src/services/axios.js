@@ -4,7 +4,7 @@ import https from 'https';
 import store from '../store';
 
 const $axios = axios.create({
-  baseURL: 'https://localhost:44337/api/',
+  baseURL: 'https://backend.wrautomaten.nl/api',
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',

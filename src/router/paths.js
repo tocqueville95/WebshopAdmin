@@ -9,6 +9,8 @@ import DashView from '../Dash.vue';
 import DashboardView from '../views/Dashboard.vue';
 import ProductsView from '../views/Products.vue';
 import ProductView from '../views/Product.vue';
+import MachinesView from '../views/Machines.vue';
+import MachineView from '../views/Machine.vue';
 import OrdersView from '../views/Orders.vue';
 import OrderView from '../views/Order.vue';
 import InvoicesView from '../views/Invoices.vue';
@@ -40,6 +42,18 @@ export default [
         path: '/products/:id',
         // Relative to /src/views
         component: ProductView,
+      },
+      {
+        path: '/machines',
+        component: MachinesView,
+      },
+      {
+        path: '/machines/new',
+        component: MachineView,
+      },
+      {
+        path: '/machines/:id',
+        component: MachineView,
       },
       {
         path: '/orders',

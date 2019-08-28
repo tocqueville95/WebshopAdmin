@@ -10,7 +10,7 @@
       >
         <material-card
           color="orange"
-          title="Nieuw product"
+          title="Nieuwe machine"
           text="Gelieve alle velden in te vullen"
         >
           <v-form
@@ -24,49 +24,32 @@
                 lg4
               >
                 <v-text-field
-                  id="product.name"
-                  v-model="product.productName"
+                  id="machine.name"
+                  v-model="machine.machineName"
                   :rules="nameRules"
                   type="text"
-                  name="product.productName"
-                  label="Productnaam"
+                  name="machine.machineName"
+                  label="Machinenaam"
                 />
                 <v-textarea
-                  v-model="product.shortDescription"
+                  v-model="machine.description"
                   :rules="shortDescriptionRules"
                   name="input-7-1"
                   label="Korte beschrijving"
                   hint="Korte beschrijving"
                 />
                 <v-autocomplete
-                  v-model="product.category"
+                  v-model="machine.type"
                   :items="categoryList"
                   label="Categorie"
                   persistent-hint
                   chips
                   multiple
                 />
-                <v-text-field
-                  id="productCategoryNew"
-                  v-model="category"
-                  type="text"
-                  name="productCategory"
-                  label="Nieuwe categorie"
-                />
                 <v-layout>
-                  <v-flex xs6>
+                  <v-flex xs12>
                     <v-text-field
-                      v-model="product.discount"
-                      :rules="discountRules"
-                      name="discount"
-                      label="Korting"
-                      hint="Korting"
-                      value="0"
-                    />
-                  </v-flex>
-                  <v-flex xs6>
-                    <v-text-field
-                      v-model="product.price"
+                      v-model="machine.price"
                       :rules="priceRules"
                       name="price"
                       label="Prijs"
@@ -98,15 +81,6 @@
                   aspect-ratio="1"
                 />
               </v-flex>
-              <v-flex
-                xs12
-                lg8
-              >
-                <!-- Text Editor -->
-                <VueEditor
-                  v-model="product.longDescription"
-                />
-              </v-flex>
             </v-layout>
           </v-form>
         </material-card>
@@ -130,7 +104,7 @@
             <v-btn
               color="primary"
               block
-              @click="saveProduct"
+              @click="saveMachine"
             >
               Opslaan
             </v-btn>
@@ -153,9 +127,9 @@ export default {
       valid: true,
       alert: false,
       category: '',
-      product: {},
+      machine: {},
       nameRules: [
-        v => !!v || 'Productnaam is verplicht',
+        v => !!v || 'Machinenaam is verplicht',
       ],
       shortDescriptionRules: [
         v => !!v || 'Korte beschrijving is verplicht',
@@ -164,10 +138,13 @@ export default {
         v => /^[0-9]*$/.test(v) || 'Korting moet een getal zijn',
       ],
       priceRules: [
-        v => !!v || 'Prijs is verplicht',
         v => /^[0-9]*$/.test(v) || 'Prijs moet een getal zijn',
       ],
-      categoryList: [],
+      categoryList: [
+        'vending',
+        'coffee',
+        'occasion',
+      ],
       file: '',
       content: [
         'test',
@@ -182,14 +159,12 @@ export default {
   },
   mounted() {
     if (this.$route.params.id) {
-      this.$axios.get(`products/${this.$route.params.id}`)
+      this.$axios.get(`machines/${this.$route.params.id}`)
         .then((res) => {
-          this.product = res.data;
-          this.photo = this.product.photo;
+          this.machine = res.data;
+          this.photo = this.machine.photo;
         });
     }
-    this.$axios.get('products/categories')
-      .then((res) => { this.categoryList = res.data; });
   },
   methods: {
     validate() {
@@ -211,26 +186,26 @@ export default {
           },
         })
         .then((res) => {
-          this.product.photo = res.data;
+          this.machine.photo = res.data;
           this.photo = res.data;
         });
     },
-    saveProduct() {
+    saveMachine() {
       this.validate();
       if (this.valid) {
-        this.product.photo = this.photo;
+        this.machine.photo = this.photo;
         if (this.category) {
-          if (this.product.category) { this.product.category.push(this.category); } else {
-            this.product.category = [];
-            this.product.category.push(this.category);
+          if (this.machine.category) { this.machine.category.push(this.category); } else {
+            this.machine.category = [];
+            this.machine.category.push(this.category);
           }
         }
         if (this.$route.params.id) {
-          this.$axios.put(`products/${this.$route.params.id}`, this.product)
-            .then(() => { this.$router.push('/products?editedSuccessfully=true'); });
+          this.$axios.put(`machines/${this.$route.params.id}`, this.machine)
+            .then(() => { this.$router.push('/machines?editedSuccessfully=true'); });
         } else {
-          this.$axios.post('products', this.product)
-            .then(() => { this.$router.push('/products?addedSuccessfully=true'); });
+          this.$axios.post('machines', this.machine)
+            .then(() => { this.$router.push('/machines?addedSuccessfully=true'); });
         }
       } else {
         this.alert = true;
